@@ -10,18 +10,17 @@ package com.maxvalley.pantallavirtual;
         import android.os.Bundle;
         import android.util.Log;
         import android.widget.Button;
-        import android.widget.EditText;
         import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements Listener{
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
-    private EditText mEtMessage;
-    private Button mBtWrite;
+    //private EditText mEtMessage;
+    //private Button mBtWrite;
     private Button mBtRead;
 
-    private NFCWriteFragment mNfcWriteFragment;
+    //private NFCWriteFragment mNfcWriteFragment;
     private NFCReadFragment mNfcReadFragment;
 
     private boolean isDialogDisplayed = false;
@@ -40,11 +39,7 @@ public class MainActivity extends AppCompatActivity implements Listener{
 
     private void initViews() {
 
-        mEtMessage = (EditText) findViewById(R.id.et_message);
-        mBtWrite = (Button) findViewById(R.id.btn_write);
         mBtRead = (Button) findViewById(R.id.btn_read);
-
-        mBtWrite.setOnClickListener(view -> showWriteFragment());
         mBtRead.setOnClickListener(view -> showReadFragment());
     }
 
@@ -53,19 +48,6 @@ public class MainActivity extends AppCompatActivity implements Listener{
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
     }
 
-    private void showWriteFragment() {
-
-        isWrite = true;
-
-        mNfcWriteFragment = (NFCWriteFragment) getFragmentManager().findFragmentByTag(NFCWriteFragment.TAG);
-
-        if (mNfcWriteFragment == null) {
-
-            mNfcWriteFragment = NFCWriteFragment.newInstance();
-        }
-        mNfcWriteFragment.show(getFragmentManager(),NFCWriteFragment.TAG);
-
-    }
 
     private void showReadFragment() {
 
@@ -126,17 +108,8 @@ public class MainActivity extends AppCompatActivity implements Listener{
 
             if (isDialogDisplayed) {
 
-                if (isWrite) {
-
-                    String messageToWrite = mEtMessage.getText().toString();
-                    mNfcWriteFragment = (NFCWriteFragment) getFragmentManager().findFragmentByTag(NFCWriteFragment.TAG);
-                    mNfcWriteFragment.onNfcDetected(ndef,messageToWrite);
-
-                } else {
-
                     mNfcReadFragment = (NFCReadFragment)getFragmentManager().findFragmentByTag(NFCReadFragment.TAG);
                     mNfcReadFragment.onNfcDetected(ndef);
-                }
             }
         }
     }
