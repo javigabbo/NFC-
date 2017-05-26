@@ -26,6 +26,11 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.app.Activity;
 import android.content.Context;
+import android.os.StrictMode;
+import android.widget.Toast;
+
+import static com.maxvalley.pantallavirtual.ClientConnection.GET;
+import static java.security.AccessController.getContext;
 
 
 
@@ -45,6 +50,7 @@ public class ClientConnection {
 
     public interface CallBack {
         public void OnSuccess(JSONObject Res);
+
         public void OnError(String Error);
     }
 
@@ -147,6 +153,11 @@ public class ClientConnection {
 
     public static String GET(String url) throws ClientProtocolException, IOException {
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+
+
         InputStream inputStream = null;
         String result = "";
 
@@ -155,7 +166,6 @@ public class ClientConnection {
 
         // make GET request to the given URL
         HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
-
         // receive response as inputStream
         inputStream = httpResponse.getEntity().getContent();
 
@@ -192,18 +202,31 @@ public class ClientConnection {
         else
             return false;
     }
-    /*private class HttpAsyncTask extends AsyncTask<String, Void, String> {
+
+
+
+/*
+    private class HttpAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
 
-            return GET(urls[0]);
+            try {
+                return GET(urls[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
-            etResponse.setText(result);
+            Toast.makeText(getContext(), "Received!", Toast.LENGTH_SHORT).show();
        }
-    }*/
+
+
+    }
+    */
+
+
 }
 

@@ -9,29 +9,34 @@ package com.maxvalley.pantallavirtual;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
         import android.util.Log;
+        import android.view.Window;
+        import android.view.WindowManager;
         import android.widget.Button;
-        import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements Listener{
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
-    //private EditText mEtMessage;
-    //private Button mBtWrite;
+
     private Button mBtRead;
-
-    //private NFCWriteFragment mNfcWriteFragment;
     private NFCReadFragment mNfcReadFragment;
-
-    private boolean isDialogDisplayed = false;
-    private boolean isWrite = false;
+    public static MainActivity instance = new MainActivity();
+    public boolean isDialogDisplayed = false;
+    public boolean isWrite = false;
 
     private NfcAdapter mNfcAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+
         setContentView(R.layout.activity_main);
+
+        getSupportActionBar().hide();
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         initViews();
         initNFC();
@@ -77,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements Listener{
     @Override
     protected void onResume() {
         super.onResume();
+
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         IntentFilter ndefDetected = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
         IntentFilter techDetected = new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED);
@@ -103,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements Listener{
         Log.d(TAG, "onNewIntent: "+intent.getAction());
 
         if(tag != null) {
-            Toast.makeText(this, getString(R.string.message_tag_detected), Toast.LENGTH_SHORT).show();
             Ndef ndef = Ndef.get(tag);
 
             if (isDialogDisplayed) {
