@@ -16,6 +16,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import static java.lang.System.out;
 
 import org.json.JSONObject;
@@ -92,19 +94,24 @@ public class NFCReadFragment extends DialogFragment implements ClientConnection.
             String mensajes[] = message.split("/");
 
 
-            if (mensajes[1].equals("reset")) {
-                mTvMessage.setText("Reiniciando los videos en las tres pantalals");
-            } else if (mensajes[3].equals("0") && mensajes[5].equals("1")) {
-                mTvMessage.setText("Lanzamiento anuncio pantalla 1");
-            } else if (mensajes[3].equals("1") && mensajes[5].equals("2")) {
-                mTvMessage.setText("Lanzamiento anuncio pantalla 2");
-            } else if (mensajes[3].equals("2") && mensajes[5].equals("3")) {
-                mTvMessage.setText("Lanzamiento anuncio pantalla 3");
-            } else if (mensajes[3].equals("all") && mensajes[5].equals("random")) {
-                mTvMessage.setText("Todos los anuncios en las 3 pantallas");
-            } else {
+            try{
+                if (mensajes[1].equals("reset")) {
+                    mTvMessage.setText("Reiniciando los videos en las tres pantalals");
+                } else if (mensajes[3].equals("0") && mensajes[5].equals("1")) {
+                    mTvMessage.setText("Lanzamiento anuncio pantalla 1");
+                } else if (mensajes[3].equals("1") && mensajes[5].equals("2")) {
+                    mTvMessage.setText("Lanzamiento anuncio pantalla 2");
+                } else if (mensajes[3].equals("2") && mensajes[5].equals("3")) {
+                    mTvMessage.setText("Lanzamiento anuncio pantalla 3");
+                } else if (mensajes[3].equals("all") && mensajes[5].equals("random")) {
+                    mTvMessage.setText("Todos los anuncios en las 3 pantallas");
+                } else {
+                    mTvMessage.setText("Tag no reconocido");
+                }
+            }catch (Exception e){
                 mTvMessage.setText("Tag no reconocido");
             }
+
 
             System.out.println("EL MENSAJE::::::::::::::::::" + message);
             ndef.close();
